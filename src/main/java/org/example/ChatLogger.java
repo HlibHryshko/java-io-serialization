@@ -12,8 +12,10 @@ public class ChatLogger {
     }
 
     public void logMessage (ChatMessage message) {
+        boolean append = new File(fileName).exists();
+
         try (FileOutputStream fos = new FileOutputStream(fileName, true);
-        ObjectOutputStream oos = new AppendableObjectOutputStream(fos)) {
+        ObjectOutputStream oos = append ? new AppendableObjectOutputStream(fos) : new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
             System.err.println("Error saving chat message: " + e.getMessage());
